@@ -23,6 +23,7 @@ public class Goose : Enemy
     public int featherDamage = 10;
     public int pulses = 6;
     private bool currentlyAttacking = false;
+    private bool canChase = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
@@ -35,9 +36,15 @@ public class Goose : Enemy
     {
         base.Update();
         if (target == null) return;
-        FaceTarget();
-        if (currentlyAttacking) return;
-        ChaseTarget();
+        if (canChase)
+        {
+            ChaseTarget();
+        }
+        else
+        {
+            FaceTarget();
+        }
+        if (currentlyAttacking) return;  
 
         //Attacking
         int move = Random.Range(1, 4); //1 = Chase, 2 = Throw, 3 = Spin
@@ -74,10 +81,13 @@ public class Goose : Enemy
 
     private IEnumerator StartEggThrow()
     {
+        rb.linearVelocity = Vector2.zero; // Stop movement during egg throw
         currentlyAttacking = true;
+        canChase = false;
         animator.SetTrigger("EggThrow");
         yield return new WaitForSeconds(eggThrowDuration);
         currentlyAttacking = false;
+        canChase = true;
     }
 
     private void ShootEggs()
@@ -93,7 +103,9 @@ public class Goose : Enemy
 
     private IEnumerator StartSpin()
     {
+        rb.linearVelocity = Vector2.zero; // Stop movement during spin
         currentlyAttacking = true;
+        canChase = false;
         animator.SetBool("Spinning", true);
         for (int i = 0; i < pulses; i++)
         {
@@ -102,15 +114,18 @@ public class Goose : Enemy
         }
         animator.SetBool("Spinning", false);
         currentlyAttacking = false;
+        canChase = true;
     }
 
     public void ShootFeathers()
     {
         for (int i = 0; i < feathersPerPulse; i++)
         {
-            GameObject feather = Instantiate(featherPrefab, transform.position, Quaternion.identity);
-            Rigidbody2D featherRb = feather.GetComponent<Rigidbody2D>();
             Vector2 direction = (new Vector2(Random.Range(-1f,1f),Random.Range(-1f,1f))).normalized;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+            GameObject feather = Instantiate(featherPrefab, transform.position, Quaternion.Euler(0,0,angle));
+            Rigidbody2D featherRb = feather.GetComponent<Rigidbody2D>();
+            
             featherRb.AddForce(direction * featherSpeed, ForceMode2D.Impulse);
         }
     }
