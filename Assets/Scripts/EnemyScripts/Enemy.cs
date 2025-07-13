@@ -53,6 +53,19 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    protected virtual void FaceTarget()
+    {
+        Vector2 direction = (target.position - transform.position).normalized;
+        if (direction.x < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+    }
+
     protected virtual void ChaseTarget()
     {
         if (target != null)
@@ -62,14 +75,7 @@ public class Enemy : MonoBehaviour
             {
                 rb.linearVelocity = direction * speed;
             }
-            if (direction.x < 0)
-            {
-                transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-            else
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
+            FaceTarget();
         }
     }
 
