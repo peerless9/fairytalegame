@@ -7,9 +7,11 @@ public class Goose : Enemy
     public float chaseDuration = 5f;
     public float dashForce = 200f;
     public float dashTimeLength = 1f;
+    public float chaseRest = 1f;
 
     [Header("Egg Throw Stats")]
     public float eggThrowForce = 100f;
+    public float eggThrowRest = 1f;
     public GameObject eggPrefab;
     public int eggCount = 3;
     public int eggDamage = 20;
@@ -17,6 +19,7 @@ public class Goose : Enemy
 
     [Header("Spin Stats")]
     public float spinDuration = 3f;
+    public float spinRest = 2.5f;
     public int feathersPerPulse = 5;
     public GameObject featherPrefab;
     public float featherSpeed = 10f;
@@ -29,6 +32,7 @@ public class Goose : Enemy
     protected override void Start()
     {
         base.Start();
+        healthBar = GameObject.FindGameObjectWithTag("BossBar").GetComponent<HealthBar>();
     }
 
     // Update is called once per frame
@@ -68,6 +72,7 @@ public class Goose : Enemy
         animator.SetBool("Charging", true);
         yield return new WaitForSeconds(chaseDuration);
         animator.SetBool("Charging", false);
+        yield return new WaitForSeconds(chaseRest);
         currentlyAttacking = false;
     }
 
@@ -86,18 +91,21 @@ public class Goose : Enemy
         canChase = false;
         animator.SetTrigger("EggThrow");
         yield return new WaitForSeconds(eggThrowDuration);
+        yield return new WaitForSeconds(eggThrowRest);
         currentlyAttacking = false;
         canChase = true;
     }
 
-    private void ShootEggs()
+    public IEnumerator ShootEggs()
     {
         for (int i = 0; i < eggCount; i++)
         {
-            GameObject egg = Instantiate(eggPrefab, transform.position, Quaternion.identity);
-            Rigidbody2D eggRb = egg.GetComponent<Rigidbody2D>();
             Vector2 direction = (target.position - transform.position).normalized;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+            GameObject egg = Instantiate(eggPrefab, transform.position, Quaternion.Euler(0,0,angle));
+            Rigidbody2D eggRb = egg.GetComponent<Rigidbody2D>();
             eggRb.AddForce(direction * eggThrowForce, ForceMode2D.Impulse);
+            yield return new WaitForSeconds(eggThrowDuration / eggCount);
         }
     }
 
@@ -113,6 +121,7 @@ public class Goose : Enemy
             yield return new WaitForSeconds(spinDuration / pulses);
         }
         animator.SetBool("Spinning", false);
+        yield return new WaitForSeconds(spinRest);
         currentlyAttacking = false;
         canChase = true;
     }

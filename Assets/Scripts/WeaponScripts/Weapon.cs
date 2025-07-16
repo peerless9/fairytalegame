@@ -4,8 +4,11 @@ public class Weapon : MonoBehaviour
 {
     public float damage = 10f;
     public float attackCooldown = 1f;
-    private float currCooldown = 0f;
-    private Animator animator;
+    public GameObject trailEffect;
+    protected float currCooldown = 0f;
+    protected Animator animator;
+    protected bool inSwing = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
@@ -20,13 +23,25 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    public void startSwing()
+    {
+        trailEffect.SetActive(true);
+        inSwing = true;
+    }
+
+    public void endSwing()
+    {
+        trailEffect.SetActive(false);
+        inSwing = false;
+    }
+
     public virtual void Attack()
     {
         if (currCooldown <= 0)
         {
             animator.SetTrigger("Attack");
             currCooldown = attackCooldown;
-            
+
         }
     }
 

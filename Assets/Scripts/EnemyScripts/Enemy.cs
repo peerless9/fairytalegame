@@ -1,26 +1,24 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Entity
 {
     //Stats for the enemy
     [Header("Enemy Stats")]
-    public int maxHealth = 100;
     public float speed = 2f;
     public float damage = 10f;
     public float attackRange = 1.5f;
     public float attackCooldown = 1f;
     protected float currCooldown = 0f;
 
-    protected int health;
     protected Transform target;
     protected Rigidbody2D rb;
     protected Animator animator;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
-        health = maxHealth;
         animator = GetComponent<Animator>();
 
         target = GameObject.FindGameObjectWithTag("Player").transform;
@@ -33,24 +31,6 @@ public class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         
-    }
-
-    public virtual void Heal(int amount)
-    {
-        health += amount;
-        if (health > maxHealth)
-        {
-            health = maxHealth;
-        }
-    }
-
-    public virtual void TakeDamage(int damage)
-    {
-        health -= damage;
-        if (health <= 0)
-        {
-            Die();
-        }
     }
 
     protected virtual void FaceTarget()
@@ -90,9 +70,5 @@ public class Enemy : MonoBehaviour
         {
             currCooldown -= Time.deltaTime;
         }
-    }
-    protected virtual void Die()
-    {
-        Destroy(gameObject);
     }
 }
