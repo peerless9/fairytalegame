@@ -457,7 +457,7 @@ GameObject:
   - component: {fileID: 420026019}
   m_Layer: 5
   m_Name: Player Bar
-  m_TagString: BossBar
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2291,9 +2291,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4187797925419372993, guid: 9e21873f8c8c7fd43b8bc42e2c68e0f2, type: 3}
+      propertyPath: eggDamage
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4187797925419372993, guid: 9e21873f8c8c7fd43b8bc42e2c68e0f2, type: 3}
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 732068137}
+    - target: {fileID: 4187797925419372993, guid: 9e21873f8c8c7fd43b8bc42e2c68e0f2, type: 3}
+      propertyPath: featherDamage
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4584517710228339897, guid: 9e21873f8c8c7fd43b8bc42e2c68e0f2, type: 3}
       propertyPath: m_Name
       value: mother goose

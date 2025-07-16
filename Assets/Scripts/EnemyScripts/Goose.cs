@@ -32,7 +32,7 @@ public class Goose : Enemy
     protected override void Start()
     {
         base.Start();
-        healthBar = GameObject.FindGameObjectWithTag("BossBar").GetComponent<HealthBar>();
+        //healthBar = GameObject.FindGameObjectWithTag("BossBar").GetComponent<HealthBar>();
     }
 
     // Update is called once per frame
@@ -103,6 +103,11 @@ public class Goose : Enemy
             Vector2 direction = (target.position - transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
             GameObject egg = Instantiate(eggPrefab, transform.position, Quaternion.Euler(0,0,angle));
+
+            Projectile eggProjectile = egg.GetComponent<Projectile>();
+            eggProjectile.damage = eggDamage;
+            eggProjectile.sender = gameObject;
+
             Rigidbody2D eggRb = egg.GetComponent<Rigidbody2D>();
             eggRb.AddForce(direction * eggThrowForce, ForceMode2D.Impulse);
             yield return new WaitForSeconds(eggThrowDuration / eggCount);
@@ -133,6 +138,11 @@ public class Goose : Enemy
             Vector2 direction = (new Vector2(Random.Range(-1f,1f),Random.Range(-1f,1f))).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
             GameObject feather = Instantiate(featherPrefab, transform.position, Quaternion.Euler(0,0,angle));
+
+            Projectile featherProjectile = feather.GetComponent<Projectile>();
+            featherProjectile.damage = featherDamage;
+            featherProjectile.sender = gameObject;
+
             Rigidbody2D featherRb = feather.GetComponent<Rigidbody2D>();
             
             featherRb.AddForce(direction * featherSpeed, ForceMode2D.Impulse);
