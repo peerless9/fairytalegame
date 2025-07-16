@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 5691892926013823404}
   - component: {fileID: 6907853945543836474}
   - component: {fileID: 4187797925419372993}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: mother goose
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -206,7 +206,7 @@ MonoBehaviour:
   attackRange: 1.5
   attackCooldown: 1
   chaseDuration: 3
-  dashForce: 25
+  dashForce: 1250
   dashTimeLength: 1.2
   chaseRest: 1
   eggThrowForce: 50

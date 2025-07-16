@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public float damage = 10f;
+    public int damage = 10;
     public float attackCooldown = 1f;
     public GameObject trailEffect;
     protected float currCooldown = 0f;
     protected Animator animator;
     protected bool inSwing = false;
+    protected bool canDamage = true; // Damange debounce so that the enemy doesn't take damage multiple times in one swing
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
@@ -39,9 +40,25 @@ public class Weapon : MonoBehaviour
     {
         if (currCooldown <= 0)
         {
+            canDamage = true; // Reset damage debounce
             animator.SetTrigger("Attack");
             currCooldown = attackCooldown;
 
+        }
+    }
+
+    protected virtual void OnTriggerStay2D(Collider2D collision)
+    {
+        print(collision.gameObject.name);
+        if (collision.CompareTag("Enemy") && inSwing && canDamage)
+        {
+            canDamage = false; // Prevents multiple hits in one swing
+            print("GET HIM");
+            Enemy enemy = collision.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
         }
     }
 
