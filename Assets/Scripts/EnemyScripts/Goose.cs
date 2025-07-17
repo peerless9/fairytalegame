@@ -27,6 +27,7 @@ public class Goose : Enemy
     public int pulses = 6;
     private bool currentlyAttacking = false;
     private bool canChase = true;
+    private bool isDashing = false; //If true, then the goose will do damage when it rams into the player
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
@@ -78,10 +79,11 @@ public class Goose : Enemy
 
     public IEnumerator Dash() // Dash method is called by animation event
     {
-        print("Goose is dashing!");
+        isDashing = true;
         rb.AddForce((target.position - transform.position).normalized * dashForce, ForceMode2D.Impulse);
         yield return new WaitForSeconds(dashTimeLength);
         rb.linearVelocity = Vector2.zero; // Stop the goose after dashing
+        isDashing = false;
     }
 
     private IEnumerator StartEggThrow()
@@ -130,21 +132,34 @@ public class Goose : Enemy
         currentlyAttacking = false;
         canChase = true;
     }
+    
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && isDashing)
+        {
+            Entity player = collision.gameObject.GetComponent<Entity>();
+            if (player != null)
+            {
+                player.TakeDamage(10); // Adjust damage as needed
+                isDashing = false; // so we don't damage the player multiple times in one dash
+            }
+        }
+    }
 
     public void ShootFeathers()
     {
         for (int i = 0; i < feathersPerPulse; i++)
         {
-            Vector2 direction = (new Vector2(Random.Range(-1f,1f),Random.Range(-1f,1f))).normalized;
+            Vector2 direction = (new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f))).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-            GameObject feather = Instantiate(featherPrefab, transform.position, Quaternion.Euler(0,0,angle));
+            GameObject feather = Instantiate(featherPrefab, transform.position, Quaternion.Euler(0, 0, angle));
 
             Projectile featherProjectile = feather.GetComponent<Projectile>();
             featherProjectile.damage = featherDamage;
             featherProjectile.sender = gameObject;
 
             Rigidbody2D featherRb = feather.GetComponent<Rigidbody2D>();
-            
+
             featherRb.AddForce(direction * featherSpeed, ForceMode2D.Impulse);
         }
     }
