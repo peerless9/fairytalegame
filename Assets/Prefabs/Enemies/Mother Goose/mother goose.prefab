@@ -208,15 +208,15 @@ MonoBehaviour:
   chaseDuration: 3
   dashForce: 1250
   dashTimeLength: 1.2
-  chaseRest: 1
-  eggThrowForce: 50
-  eggThrowRest: 1
+  chaseRest: 3
+  eggThrowForce: 30
+  eggThrowRest: 2
   eggPrefab: {fileID: 6391732925828002893, guid: eb05794f777b34326bde069b4ee696b8, type: 3}
   eggCount: 4
   eggDamage: 15
   eggThrowDuration: 1
   spinDuration: 3
-  spinRest: 2.5
+  spinRest: 3
   feathersPerPulse: 50
   featherPrefab: {fileID: 8387161873109101980, guid: d65af598e7de8ce40b74c5d247e53d8f, type: 3}
   featherSpeed: 10

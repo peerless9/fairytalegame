@@ -16,7 +16,6 @@ public class PlayerCombat : MonoBehaviour
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector2 direction = (mousePosition - (Vector2)transform.position).normalized;
         float zAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        // Flip the weapon if facing left by changing localScale.x
         Vector3 pivotScale = weaponPivot.localScale;
         pivotScale.y = direction.x < 0 ? -Mathf.Abs(pivotScale.x) : Mathf.Abs(pivotScale.x);
         weaponPivot.localScale = pivotScale;
