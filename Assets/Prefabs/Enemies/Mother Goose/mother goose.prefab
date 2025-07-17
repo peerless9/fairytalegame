@@ -213,12 +213,12 @@ MonoBehaviour:
   eggThrowRest: 1
   eggPrefab: {fileID: 6391732925828002893, guid: eb05794f777b34326bde069b4ee696b8, type: 3}
   eggCount: 4
-  eggDamage: 20
+  eggDamage: 15
   eggThrowDuration: 1
   spinDuration: 3
   spinRest: 2.5
   feathersPerPulse: 50
   featherPrefab: {fileID: 8387161873109101980, guid: d65af598e7de8ce40b74c5d247e53d8f, type: 3}
   featherSpeed: 10
-  featherDamage: 10
+  featherDamage: 5
   pulses: 6
