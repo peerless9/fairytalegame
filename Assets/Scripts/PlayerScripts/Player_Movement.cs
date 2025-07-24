@@ -12,6 +12,7 @@ public class Player_Movement : MonoBehaviour
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
     private Rigidbody2D rb;
+    public GameObject dashEffectPrefab;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
     private Vector2 moveInput;
@@ -48,6 +49,17 @@ public class Player_Movement : MonoBehaviour
             rb.linearVelocity = moveInput * moveSpeed;
         }
         UpdateTimers();
+    }
+
+
+    void FixedUpdate()
+    {
+        if (dashTimer > dashCooldown - dashDuration)
+        {
+            GameObject afterEffect = Instantiate(dashEffectPrefab, transform.position, transform.rotation);
+            afterEffect.GetComponent<SpriteRenderer>().sprite = spriteRenderer.sprite;
+            Destroy(afterEffect,0.2f);
+        }
     }
 
     private void UpdateTimers()
